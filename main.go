@@ -18,8 +18,11 @@ func main() {
 		return
 	}
 
-	http.Handle("/dl", NewDownloadHandler(*basePath))
+	coord := NewDownloadCoordinator()
+	http.Handle("/dl", NewDownloadHandler(*basePath, coord))
+	http.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir(*basePath))))
 	http.Handle("/", http.FileServer(http.Dir("fs/")))
-	http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
-	fmt.Printf("Now serving on port %d", *port)
+	if e := http.ListenAndServe(fmt.Sprintf(":%d", *port), nil); e != nil {
+		fmt.Printf("Cannot listen! Error: %s\n", e.String())
+	}
 }

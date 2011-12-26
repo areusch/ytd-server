@@ -1,0 +1,20 @@
+.empty-url {
+    color: grey;
+    font-style: italic;
+}
+
+.template {
+    display: none;
+}
+
+.progress-bar {
+    width: 100px;
+    background-color: red;
+    display: inline-block;
+    height: 1em;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+}
