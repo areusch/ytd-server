@@ -26,21 +26,27 @@ function pingRequest(id) {
   };
 }
 
-function addRequest(id) {
+function addRequest(id, url) {
   $('div.template').clone().attr('id', 'request-' + id).removeClass('template').appendTo($('#downloads'));
+  $('#request-' + id).find('.name').text(url);
 }
 
 function handleStatus(status) {
+  $('#loader').hide();
+  $('#url').removeAttr('disabled').val('');
   var id = status.requestId;
-  addRequest(id);
+  addRequest(id, $('#url').val());
   updateStatus(status);
 }
 
 function handleEnqueueFail(e) {
   alert('fail');
+  $('#url').removeAttr('disabled').val('');
 }
 
 function enqueueURL() {
+  $('#loader').show();
+  $('#url').attr('disabled', 'disabled');
   $.ajax({type: "POST",
           url: "/dl",
           data: {url: $('#url').val(), json: 1}})
@@ -56,7 +62,7 @@ function handleURLFocus() {
 
 function handleURLBlur() {
   if ($('#url').val() == '') {
-    $('#url').addClass('empty-url').val('Enter the URL here');
+    $('#url').addClass('empty-url').val('YoutubeZ');
   }
 }
 

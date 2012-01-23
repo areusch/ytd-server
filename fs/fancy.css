@@ -18,3 +18,52 @@
     height: 100%;
     width: 0%;
 }
+
+h1 {
+    font-family: sans-serif;
+    font-size: 18pt;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+#container {
+    margin: 0 auto;
+    padding: 0 15px;
+    width: 66%;
+    height: 100%;
+    background-color: white;
+}
+
+body {
+    margin: 0;
+    background-color: #fee;
+}
+
+#loader {
+    visibility: hidden;
+}
+
+#titleauthor {
+    text-align: center;
+}
+
+#author {
+    font-size: 10pt;
+}
+
+.name {
+    float: left;
+    text-align: right;
+    width: 49.5%;
+    display: inline-block;
+}
+
+.rightside {
+    float: right;
+    width: 49.5%;
+}
+
+.clearer {
+    clear: both;
+}
+

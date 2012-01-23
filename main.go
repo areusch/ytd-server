@@ -20,7 +20,7 @@ func main() {
 
 	coord := NewDownloadCoordinator()
 	http.Handle("/dl", NewDownloadHandler(*basePath, coord))
-	http.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir(*basePath))))
+//	http.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir(*basePath))))
 	http.Handle("/", http.FileServer(http.Dir("fs/")))
 	if e := http.ListenAndServe(fmt.Sprintf(":%d", *port), nil); e != nil {
 		fmt.Printf("Cannot listen! Error: %s\n", e.String())

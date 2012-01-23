@@ -253,9 +253,16 @@ func ProcessRequest(request DownloadRequest) {
 	request.statusChannel <- StatusMessage{request.id, kTagging, "", "", 0, 0, 0, nil, ""}
 	var c = exec.Command("lltag", "--yes", "-G", "--rename=%a/%t", finalFileBaseName)
 	c.Dir = request.basePath
-	out, outError := c.StdoutPipe()
-	if outError != nil {
-		request.WriteError("starting the tagger", outError)
+	out, ioError := c.StdoutPipe()
+	if ioError != nil {
+		request.WriteError("starting the tagger", ioError)
+		return
+	}
+
+	var in io.WriteCloser
+	in, ioError = c.StdinPipe()
+	if ioError != nil {
+		request.WriteError("starting the tagger", ioError)
 		return
 	}
 
@@ -264,12 +271,13 @@ func ProcessRequest(request DownloadRequest) {
 		request.WriteError("tagging", e)
 		return
 	} else {
+		in.Write([]byte(strings.Repeat("y\n", 20)))
 		outData, e := ioutil.ReadAll(out)
 		if e != nil {
 			request.WriteError("reading the tagger output", e)
 			return
 		}
-		match := regexp.MustCompile("New filename is '(.*)'\n[ \t]*[^C \t]").FindStringSubmatch(string(outData))
+		match := regexp.MustCompile("New filename is '([^\n]*)'\n").FindStringSubmatch(string(outData))
 		fmt.Printf("out data: %s\n\nmatch: %v\n", string(outData), match)
 		if match == nil {
 			request.WriteError("finding the output file", os.NewError("fail"))
